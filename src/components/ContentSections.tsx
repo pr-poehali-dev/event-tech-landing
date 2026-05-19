@@ -113,14 +113,14 @@ const ContentSections = () => {
         <div>
           <div className="text-[#FFD600] font-display text-sm font-bold tracking-widest uppercase mb-4">О компании</div>
           <h2 className="font-display font-black text-4xl md:text-5xl text-white leading-tight mb-6">
-            12 лет строим
+            {new Date().getFullYear() - 2012}+ лет строим
             <br />
             <span className="text-gradient-yellow">сцены для</span>
             <br />
             больших событий
           </h2>
           <p className="text-white/50 leading-relaxed mb-6 font-body">
-            Мы — техническая команда полного цикла. Монтируем и демонтируем сцены, устанавливаем свет и звук, обеспечиваем техническое сопровождение мероприятий любого масштаба.
+            Мы — техническая команда полного цикла. С 2012 года монтируем и демонтируем сцены, устанавливаем свет и звук, обеспечиваем техническое сопровождение мероприятий любого масштаба.
           </p>
           <p className="text-white/50 leading-relaxed mb-10 font-body">
             В штате — опытные монтажники, техники, декораторы и хелперы. Собственный парк оборудования позволяет работать быстро и без лишних посредников.

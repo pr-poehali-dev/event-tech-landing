@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import Icon from "@/components/ui/icon";
 
+const FOUNDED_YEAR = 2012;
+const yearsOnMarket = new Date().getFullYear() - FOUNDED_YEAR;
+
 const stats = [
   { num: "500+", label: "Событий проведено" },
-  { num: "12", label: "Лет на рынке" },
+  { num: `${yearsOnMarket}+`, label: "Лет на рынке" },
   { num: "98%", label: "Довольных клиентов" },
   { num: "40+", label: "Городов России" },
 ];
