@@ -36,6 +36,90 @@ const stats = [
   { num: "40+", label: "Городов России" },
 ];
 
+const spotlights = [
+  { left: "8%",  delay: 0,    color: "#FF5C1A", angle: -18, intensity: 0.55 },
+  { left: "22%", delay: 0.8,  color: "#FF1A8C", angle: -6,  intensity: 0.45 },
+  { left: "38%", delay: 1.6,  color: "#FFD600", angle:  4,  intensity: 0.5  },
+  { left: "55%", delay: 0.4,  color: "#FF5C1A", angle: -2,  intensity: 0.6  },
+  { left: "70%", delay: 1.2,  color: "#FF1A8C", angle:  8,  intensity: 0.45 },
+  { left: "84%", delay: 2.0,  color: "#FFD600", angle:  16, intensity: 0.5  },
+];
+
+const StageLights = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 2 }}>
+    {/* Rigging bar */}
+    <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+    <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/8" />
+
+    {spotlights.map((s, i) => (
+      <div
+        key={i}
+        className="absolute top-0"
+        style={{
+          left: s.left,
+          transform: `rotate(${s.angle}deg)`,
+          transformOrigin: "top center",
+          animation: `spotlight-flicker ${3.5 + i * 0.7}s ease-in-out infinite`,
+          animationDelay: `${s.delay}s`,
+        }}
+      >
+        {/* Fixture head */}
+        <div
+          className="w-5 h-3 rounded-b-sm mx-auto"
+          style={{
+            background: `linear-gradient(to bottom, #2a2a2a, #111)`,
+            boxShadow: `0 2px 8px ${s.color}60`,
+            marginLeft: "-10px",
+          }}
+        />
+        {/* Beam cone */}
+        <div
+          style={{
+            width: 0,
+            height: 0,
+            borderLeft: "55px solid transparent",
+            borderRight: "55px solid transparent",
+            borderTop: `520px solid ${s.color}`,
+            opacity: s.intensity * 0.22,
+            filter: "blur(18px)",
+            marginLeft: "-45px",
+          }}
+        />
+        {/* Inner bright core */}
+        <div
+          className="absolute top-3"
+          style={{
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 0,
+            height: 0,
+            borderLeft: "18px solid transparent",
+            borderRight: "18px solid transparent",
+            borderTop: `400px solid ${s.color}`,
+            opacity: s.intensity * 0.35,
+            filter: "blur(6px)",
+            marginLeft: "-8px",
+          }}
+        />
+        {/* Floor glow pool */}
+        <div
+          className="absolute"
+          style={{
+            top: "510px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "140px",
+            height: "60px",
+            borderRadius: "50%",
+            background: `radial-gradient(ellipse, ${s.color}35 0%, transparent 70%)`,
+            filter: "blur(12px)",
+          }}
+        />
+      </div>
+    ))}
+  </div>
+);
+
 function useReveal() {
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -73,8 +157,8 @@ const NavBar = ({ onNav }: { onNav: (s: string) => void }) => {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-[#0A0A0F]/95 backdrop-blur-md border-b border-white/5" : ""}`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="font-display font-black text-xl tracking-tight">
-          <span className="text-gradient-orange">EVENT</span>
-          <span className="text-white">STUDIO</span>
+          <span className="text-gradient-orange">ARTSTAGE</span>
+          <span className="text-white/50">.PRO</span>
         </div>
         <div className="hidden md:flex items-center gap-8">
           {links.map((l) => (
@@ -124,8 +208,9 @@ export default function Index() {
 
       {/* HERO */}
       <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-[#FF5C1A]/20 blur-[120px] animate-glow-pulse" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-[#FF1A8C]/20 blur-[120px] animate-glow-pulse" style={{ animationDelay: "1.5s" }} />
+        <StageLights />
+        <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-[#FF5C1A]/15 blur-[120px] animate-glow-pulse" />
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-[#FF1A8C]/15 blur-[120px] animate-glow-pulse" style={{ animationDelay: "1.5s" }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#FFD600]/5 blur-[160px]" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
@@ -135,13 +220,12 @@ export default function Index() {
           </div>
 
           <h1 className="font-display font-black text-5xl md:text-7xl lg:text-8xl leading-[0.9] mb-8 tracking-tight animate-fade-up">
-            МЫ СОЗДАЁМ
+            <span className="text-gradient-orange">ARTSTAGE</span>
+            <span className="text-white/30">.PRO</span>
             <br />
-            <span className="text-gradient-orange">СОБЫТИЯ,</span>
+            <span className="text-white text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide">МЫ СОЗДАЁМ СОБЫТИЯ,</span>
             <br />
-            <span className="text-white/20">О КОТОРЫХ</span>
-            <br />
-            <span className="text-gradient-yellow">ГОВОРЯТ</span>
+            <span className="text-gradient-yellow">О КОТОРЫХ ГОВОРЯТ</span>
           </h1>
 
           <p className="text-white/50 text-lg md:text-xl max-w-xl mx-auto mb-10 font-body leading-relaxed animate-fade-up" style={{ animationDelay: "0.2s" }}>
@@ -393,10 +477,10 @@ export default function Index() {
       <footer className="border-t border-white/5 py-10 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="font-display font-black text-lg">
-            <span className="text-gradient-orange">EVENT</span>
-            <span className="text-white">STUDIO</span>
+            <span className="text-gradient-orange">ARTSTAGE</span>
+            <span className="text-white/50">.PRO</span>
           </div>
-          <div className="text-white/20 text-sm font-body text-center">© 2024 EventStudio. Все права защищены.</div>
+          <div className="text-white/20 text-sm font-body text-center">© 2024 ARTSTAGE.PRO. Все права защищены.</div>
           <div className="flex gap-4">
             {[
               { icon: "Instagram", label: "Instagram" },
