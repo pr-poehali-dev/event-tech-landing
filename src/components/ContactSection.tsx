@@ -1,9 +1,19 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
+import { useSettings } from "@/hooks/useSettings";
 
 const emptyForm = { name: "", contact: "", type: "", message: "" };
 
+const SOCIAL_MAP: { key: keyof ReturnType<typeof useSettings>["settings"]; icon: string; label: string }[] = [
+  { key: "telegram", icon: "Send", label: "Telegram" },
+  { key: "whatsapp", icon: "MessageCircle", label: "WhatsApp" },
+  { key: "instagram", icon: "Instagram", label: "Instagram" },
+  { key: "vk", icon: "Share2", label: "ВКонтакте" },
+  { key: "youtube", icon: "Youtube", label: "YouTube" },
+];
+
 const ContactSection = () => {
+  const { settings } = useSettings();
   const [form, setForm] = useState(emptyForm);
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Partial<typeof emptyForm>>({});
@@ -114,18 +124,24 @@ const ContactSection = () => {
         </div>
 
         <div className="flex flex-wrap justify-center gap-8 mt-12 text-white/30 text-sm font-body">
-          <div className="flex items-center gap-2">
-            <Icon name="Phone" size={16} className="text-[#FF5C1A]" />
-            <span>+7 (800) 000-00-00</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Icon name="Mail" size={16} className="text-[#FF5C1A]" />
-            <span>hello@eventstudio.ru</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Icon name="MapPin" size={16} className="text-[#FF5C1A]" />
-            <span>Москва, ул. Тверская, 12</span>
-          </div>
+          {settings.phone && (
+            <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`} className="flex items-center gap-2 hover:text-white transition-colors">
+              <Icon name="Phone" size={16} className="text-[#FF5C1A]" />
+              <span>{settings.phone}</span>
+            </a>
+          )}
+          {settings.email && (
+            <a href={`mailto:${settings.email}`} className="flex items-center gap-2 hover:text-white transition-colors">
+              <Icon name="Mail" size={16} className="text-[#FF5C1A]" />
+              <span>{settings.email}</span>
+            </a>
+          )}
+          {settings.address && (
+            <div className="flex items-center gap-2">
+              <Icon name="MapPin" size={16} className="text-[#FF5C1A]" />
+              <span>{settings.address}</span>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -137,16 +153,19 @@ const ContactSection = () => {
           <span className="text-gradient-orange">ARTSTAGE</span>
           <span className="text-white/50">.PRO</span>
         </div>
-        <div className="text-white/20 text-sm font-body text-center">© 2024 ARTSTAGE.PRO. Все права защищены.</div>
-        <div className="flex gap-4">
-          {[
-            { icon: "Instagram", label: "Instagram" },
-            { icon: "Send", label: "Telegram" },
-            { icon: "Youtube", label: "YouTube" },
-          ].map((s) => (
-            <button key={s.label} className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#FF5C1A] hover:border-[#FF5C1A]/30 transition-colors">
+        <div className="text-white/20 text-sm font-body text-center">© {new Date().getFullYear()} ARTSTAGE.PRO. Все права защищены.</div>
+        <div className="flex gap-3">
+          {SOCIAL_MAP.filter((s) => settings[s.key]).map((s) => (
+            <a
+              key={s.key}
+              href={settings[s.key]}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={s.label}
+              className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#FF5C1A] hover:border-[#FF5C1A]/30 transition-colors"
+            >
               <Icon name={s.icon} size={16} />
-            </button>
+            </a>
           ))}
         </div>
       </div>
