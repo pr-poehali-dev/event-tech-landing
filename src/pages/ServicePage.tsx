@@ -106,6 +106,47 @@ export default function ServicePage() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
+  // Обновляем мета-теги динамически
+  useEffect(() => {
+    if (!page) return;
+    const title = `${page.title} — ARTSTAGE.PRO`;
+    const desc = `${page.subtitle}. ${page.description.slice(0, 120)}...`;
+    const url = `https://artstage.pro/services/${page.slug}`;
+
+    document.title = title;
+    const setMeta = (sel: string, val: string) => {
+      const el = document.querySelector(sel);
+      if (el) el.setAttribute(el.tagName === "LINK" ? "href" : "content", val);
+    };
+    setMeta('meta[name="description"]', desc);
+    setMeta('meta[property="og:title"]', title);
+    setMeta('meta[property="og:description"]', desc);
+    setMeta('meta[property="og:url"]', url);
+    setMeta('link[rel="canonical"]', url);
+
+    // Schema.org для страницы услуги
+    const existing = document.getElementById("service-schema");
+    if (existing) existing.remove();
+    const script = document.createElement("script");
+    script.id = "service-schema";
+    script.type = "application/ld+json";
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": page.title,
+      "description": page.description,
+      "provider": { "@type": "Organization", "name": "ARTSTAGE.PRO", "url": "https://artstage.pro" },
+      "url": url,
+      "areaServed": "RU",
+    });
+    document.head.appendChild(script);
+
+    return () => {
+      document.title = "ARTSTAGE.PRO — Монтаж сцен, свет и звук, аренда оборудования";
+      document.getElementById("service-schema")?.remove();
+    };
+  }, [page]);
+
   useEffect(() => {
     if (!slug) return;
     fetch(`${API}?slug=${slug}`)
