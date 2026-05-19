@@ -17,12 +17,12 @@ interface Partner {
 }
 
 const services = [
-  { icon: "Theater", title: "Монтаж и демонтаж сцен", desc: "Строим сцены любого масштаба: от небольших подиумов до многоуровневых конструкций. Монтаж и демонтаж под ключ.", color: "#FF5C1A" },
-  { icon: "Zap", title: "Свет и звук", desc: "Полная установка светового и звукового оборудования. Настройка, эксплуатация и демонтаж после мероприятия.", color: "#FF1A8C" },
-  { icon: "Package", title: "Аренда оборудования", desc: "Широкий парк сценического оборудования в аренду: фермы, прожекторы, акустика, генераторы, стойки и многое другое.", color: "#FFD600" },
-  { icon: "Eye", title: "Технический надзор", desc: "Наши технические специалисты сопровождают мероприятие от начала до конца — ничто не выйдет из строя.", color: "#00D4FF" },
-  { icon: "Users", title: "Персонал мероприятий", desc: "Хелперы, техники, монтажники и декораторы. Опытная команда для любого масштаба события.", color: "#A855F7" },
-  { icon: "Palette", title: "Декор и оформление", desc: "Концептуальный дизайн пространства, флористика, инсталляции и декоративные конструкции.", color: "#10B981" },
+  { icon: "Theater", title: "Монтаж и демонтаж сцен", desc: "Строим сцены любого масштаба: от небольших подиумов до многоуровневых конструкций. Монтаж и демонтаж под ключ.", color: "#FF5C1A", slug: "montazh-scen" },
+  { icon: "Zap", title: "Свет и звук", desc: "Полная установка светового и звукового оборудования. Настройка, эксплуатация и демонтаж после мероприятия.", color: "#FF1A8C", slug: "svet-zvuk" },
+  { icon: "Package", title: "Аренда оборудования", desc: "Широкий парк сценического оборудования в аренду: фермы, прожекторы, акустика, генераторы, стойки и многое другое.", color: "#FFD600", slug: "arenda-oborudovaniya" },
+  { icon: "Eye", title: "Технический надзор", desc: "Наши технические специалисты сопровождают мероприятие от начала до конца — ничто не выйдет из строя.", color: "#00D4FF", slug: "tekhnicheskiy-nadzor" },
+  { icon: "Users", title: "Персонал мероприятий", desc: "Хелперы, техники, монтажники и декораторы. Опытная команда для любого масштаба события.", color: "#A855F7", slug: "personal" },
+  { icon: "Palette", title: "Декор и оформление", desc: "Концептуальный дизайн пространства, флористика, инсталляции и декоративные конструкции.", color: "#10B981", slug: "dekor" },
 ];
 
 const portfolio = [
@@ -57,7 +57,7 @@ const ContentSections = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {services.map((s, i) => (
-          <div key={i} className="card-hover group relative bg-[#10101A] border border-white/5 rounded-2xl p-7 overflow-hidden cursor-pointer">
+          <a key={i} href={`/services/${s.slug}`} className="card-hover group relative bg-[#10101A] border border-white/5 rounded-2xl p-7 overflow-hidden block">
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
               style={{ background: `radial-gradient(circle at 30% 30%, ${s.color}15, transparent 70%)` }}
@@ -70,7 +70,7 @@ const ContentSections = () => {
             <div className="mt-5 flex items-center gap-2 text-sm font-display font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: s.color }}>
               Подробнее <Icon name="ArrowRight" size={16} />
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </section>
