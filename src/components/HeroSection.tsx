@@ -142,7 +142,7 @@ const HeroSection = ({ mouseX, mouseY }: { mouseX: number; mouseY: number }) => 
 
   return (
     <>
-      <section ref={heroRef} id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg">
+      <section ref={heroRef} id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg pt-20">
         <StageLights mouseX={mouseX} mouseY={mouseY} sectionRef={heroRef} />
         <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-[#FF5C1A]/15 blur-[120px] animate-glow-pulse" />
         <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-[#FF1A8C]/15 blur-[120px] animate-glow-pulse" style={{ animationDelay: "1.5s" }} />
