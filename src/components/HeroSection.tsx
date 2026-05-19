@@ -198,7 +198,7 @@ const HeroSection = ({ mouseX, mouseY }: { mouseX: number; mouseY: number }) => 
       </section>
 
       {/* TICKER */}
-      <div className="overflow-hidden border-y border-white/5 bg-[#10101A] py-4">
+      <div className="overflow-hidden border-y border-white/5 bg-[#10101A] py-4 mt-16">
         <div className="flex gap-12 animate-ticker whitespace-nowrap">
           {["МОНТАЖ СЦЕН", "СВЕТ И ЗВУК", "АРЕНДА ОБОРУДОВАНИЯ", "ТЕХНИЧЕСКИЙ НАДЗОР", "ДЕКОР", "ПЕРСОНАЛ", "ДЕМОНТАЖ", "КОРПОРАТИВЫ", "ФЕСТИВАЛИ", "КОНЦЕРТЫ",
             "МОНТАЖ СЦЕН", "СВЕТ И ЗВУК", "АРЕНДА ОБОРУДОВАНИЯ", "ТЕХНИЧЕСКИЙ НАДЗОР", "ДЕКОР", "ПЕРСОНАЛ", "ДЕМОНТАЖ", "КОРПОРАТИВЫ", "ФЕСТИВАЛИ", "КОНЦЕРТЫ"].map((t, i) => (
