@@ -42,7 +42,7 @@ const ContentSections = () => {
         setPartners((data.partners || []).filter((p: Partner) => p.is_active));
         setPartnersLoading(false);
       })
-      .catch(() => setPartnersLoading(false));
+      .catch(() => { setPartners([]); setPartnersLoading(false); });
   }, []);
 
   return (

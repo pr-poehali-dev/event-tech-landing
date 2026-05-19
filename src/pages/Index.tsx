@@ -20,7 +20,6 @@ function useReveal() {
 }
 
 export default function Index() {
-  const [, setActiveSection] = useState("hero");
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   useReveal();
 
@@ -32,7 +31,7 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-white font-body">
-      <NavBar onNav={setActiveSection} />
+      <NavBar />
       <HeroSection mouseX={mouse.x} mouseY={mouse.y} />
       <ContentSections />
       <ContactSection />

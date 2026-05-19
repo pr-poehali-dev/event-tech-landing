@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Icon from "@/components/ui/icon";
 
-const NavBar = ({ onNav }: { onNav: (s: string) => void }) => {
+const NavBar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -30,7 +30,7 @@ const NavBar = ({ onNav }: { onNav: (s: string) => void }) => {
           {links.map((l) => (
             <button
               key={l.id}
-              onClick={() => { onNav(l.id); document.getElementById(l.id)?.scrollIntoView({ behavior: "smooth" }); }}
+              onClick={() => document.getElementById(l.id)?.scrollIntoView({ behavior: "smooth" })}
               className="font-body text-sm text-white/60 hover:text-white transition-colors duration-200"
             >
               {l.label}
