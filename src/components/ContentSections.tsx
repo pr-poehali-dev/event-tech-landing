@@ -1,17 +1,20 @@
+import { useEffect, useState } from "react";
 import Icon from "@/components/ui/icon";
+
+const API_URL = "https://functions.poehali.dev/e2d95977-e821-4b67-a67c-09ee00329879";
 
 const IMG_GALA = "https://cdn.poehali.dev/projects/0543cd19-8c4b-447b-af5e-1bf0504c2dc7/files/b4ab4e7d-15ff-4217-9137-2e649ece655b.jpg";
 const IMG_FESTIVAL = "https://cdn.poehali.dev/projects/0543cd19-8c4b-447b-af5e-1bf0504c2dc7/files/b5ced6e0-e8bb-4c86-8f9b-fa9b847f258c.jpg";
 const IMG_CONFERENCE = "https://cdn.poehali.dev/projects/0543cd19-8c4b-447b-af5e-1bf0504c2dc7/files/3dcccac3-148d-4429-9e09-5b4e500868e9.jpg";
 
-const partners = [
-  { name: "BrandCo", desc: "Стратегический партнёр", logo: "🏢" },
-  { name: "MediaMax", desc: "Медиа-производство", logo: "📡" },
-  { name: "LightPro", desc: "Световое оборудование", logo: "💡" },
-  { name: "SoundWave", desc: "Звуковые технологии", logo: "🎵" },
-  { name: "TechVision", desc: "Видеопроизводство", logo: "🎬" },
-  { name: "FlowerArt", desc: "Флористика и декор", logo: "🌸" },
-];
+interface Partner {
+  id: number;
+  name: string;
+  description: string;
+  logo: string;
+  logo_url: string | null;
+  is_active: boolean;
+}
 
 const services = [
   { icon: "Star", title: "Корпоративные события", desc: "Конференции, форумы, тимбилдинги и корпоративы. Организуем под ключ с полным сопровождением.", color: "#FF5C1A" },
@@ -28,7 +31,21 @@ const portfolio = [
   { img: IMG_CONFERENCE, title: "TechSummit 2024", category: "Конференция", year: "2024" },
 ];
 
-const ContentSections = () => (
+const ContentSections = () => {
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [partnersLoading, setPartnersLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(API_URL)
+      .then((r) => r.json())
+      .then((data) => {
+        setPartners((data.partners || []).filter((p: Partner) => p.is_active));
+        setPartnersLoading(false);
+      })
+      .catch(() => setPartnersLoading(false));
+  }, []);
+
+  return (
   <>
     {/* SERVICES */}
     <section id="services" className="py-24 px-6 max-w-7xl mx-auto section-reveal">
@@ -146,19 +163,37 @@ const ContentSections = () => (
             Работаем с лучшими в индустрии, чтобы гарантировать высочайшее качество каждого события
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {partners.map((p, i) => (
-            <div key={i} className="card-hover group bg-[#10101A] border border-white/5 rounded-2xl p-6 flex items-center gap-5 hover:border-[#FF5C1A]/20 transition-colors">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#16162A] to-[#1E1E35] border border-white/10 flex items-center justify-center text-2xl flex-shrink-0 group-hover:border-[#FF5C1A]/30 transition-colors">
-                {p.logo}
+        {partnersLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-[#10101A] border border-white/5 rounded-2xl p-6 flex items-center gap-5 animate-pulse">
+                <div className="w-14 h-14 rounded-xl bg-white/5 flex-shrink-0" />
+                <div className="flex-1">
+                  <div className="h-4 bg-white/5 rounded mb-2 w-2/3" />
+                  <div className="h-3 bg-white/5 rounded w-full" />
+                </div>
               </div>
-              <div>
-                <div className="font-display font-bold text-white mb-1">{p.name}</div>
-                <div className="text-white/40 text-sm font-body">{p.desc}</div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {partners.map((p) => (
+              <div key={p.id} className="card-hover group bg-[#10101A] border border-white/5 rounded-2xl p-6 flex items-center gap-5 hover:border-[#FF5C1A]/20 transition-colors">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#16162A] to-[#1E1E35] border border-white/10 flex items-center justify-center text-2xl flex-shrink-0 group-hover:border-[#FF5C1A]/30 transition-colors">
+                  {p.logo_url ? (
+                    <img src={p.logo_url} alt={p.name} className="w-9 h-9 object-contain rounded" />
+                  ) : (
+                    p.logo
+                  )}
+                </div>
+                <div>
+                  <div className="font-display font-bold text-white mb-1">{p.name}</div>
+                  <div className="text-white/40 text-sm font-body">{p.description}</div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
         <div className="mt-8 text-center">
           <p className="text-white/30 text-sm font-body">
             Хотите стать нашим партнёром?{" "}
@@ -170,6 +205,7 @@ const ContentSections = () => (
       </div>
     </section>
   </>
-);
+  );
+};
 
 export default ContentSections;
