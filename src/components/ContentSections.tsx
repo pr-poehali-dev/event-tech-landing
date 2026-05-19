@@ -1,0 +1,175 @@
+import Icon from "@/components/ui/icon";
+
+const IMG_GALA = "https://cdn.poehali.dev/projects/0543cd19-8c4b-447b-af5e-1bf0504c2dc7/files/b4ab4e7d-15ff-4217-9137-2e649ece655b.jpg";
+const IMG_FESTIVAL = "https://cdn.poehali.dev/projects/0543cd19-8c4b-447b-af5e-1bf0504c2dc7/files/b5ced6e0-e8bb-4c86-8f9b-fa9b847f258c.jpg";
+const IMG_CONFERENCE = "https://cdn.poehali.dev/projects/0543cd19-8c4b-447b-af5e-1bf0504c2dc7/files/3dcccac3-148d-4429-9e09-5b4e500868e9.jpg";
+
+const partners = [
+  { name: "BrandCo", desc: "Стратегический партнёр", logo: "🏢" },
+  { name: "MediaMax", desc: "Медиа-производство", logo: "📡" },
+  { name: "LightPro", desc: "Световое оборудование", logo: "💡" },
+  { name: "SoundWave", desc: "Звуковые технологии", logo: "🎵" },
+  { name: "TechVision", desc: "Видеопроизводство", logo: "🎬" },
+  { name: "FlowerArt", desc: "Флористика и декор", logo: "🌸" },
+];
+
+const services = [
+  { icon: "Star", title: "Корпоративные события", desc: "Конференции, форумы, тимбилдинги и корпоративы. Организуем под ключ с полным сопровождением.", color: "#FF5C1A" },
+  { icon: "Music", title: "Фестивали и концерты", desc: "Масштабные публичные мероприятия с профессиональным звуком, светом и сценографией.", color: "#FF1A8C" },
+  { icon: "Heart", title: "Частные мероприятия", desc: "Свадьбы, юбилеи, вечеринки. Каждое событие — уникальная история, рассказанная в деталях.", color: "#FFD600" },
+  { icon: "Globe", title: "Онлайн и гибридные", desc: "Трансляции, виртуальные конференции и гибридные форматы для аудитории по всему миру.", color: "#00D4FF" },
+  { icon: "Camera", title: "Фото и видеосъёмка", desc: "Профессиональная съёмка и монтаж. Ваши события останутся в памяти навсегда.", color: "#A855F7" },
+  { icon: "Palette", title: "Декор и сценография", desc: "Концептуальный дизайн пространства, флористика, инсталляции и световые шоу.", color: "#10B981" },
+];
+
+const portfolio = [
+  { img: IMG_GALA, title: "Гала-ужин «Звёздная ночь»", category: "Корпоратив", year: "2024" },
+  { img: IMG_FESTIVAL, title: "Фестиваль NEON FEST", category: "Фестиваль", year: "2024" },
+  { img: IMG_CONFERENCE, title: "TechSummit 2024", category: "Конференция", year: "2024" },
+];
+
+const ContentSections = () => (
+  <>
+    {/* SERVICES */}
+    <section id="services" className="py-24 px-6 max-w-7xl mx-auto section-reveal">
+      <div className="mb-16">
+        <div className="text-[#FF5C1A] font-display text-sm font-bold tracking-widest uppercase mb-4">Что мы делаем</div>
+        <h2 className="font-display font-black text-4xl md:text-5xl text-white">
+          Наши <span className="text-gradient-orange">услуги</span>
+        </h2>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {services.map((s, i) => (
+          <div key={i} className="card-hover group relative bg-[#10101A] border border-white/5 rounded-2xl p-7 overflow-hidden cursor-pointer">
+            <div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              style={{ background: `radial-gradient(circle at 30% 30%, ${s.color}15, transparent 70%)` }}
+            />
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={{ backgroundColor: `${s.color}20`, color: s.color }}>
+              <Icon name={s.icon} size={22} />
+            </div>
+            <h3 className="font-display font-bold text-lg text-white mb-3">{s.title}</h3>
+            <p className="text-white/50 text-sm leading-relaxed font-body">{s.desc}</p>
+            <div className="mt-5 flex items-center gap-2 text-sm font-display font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: s.color }}>
+              Подробнее <Icon name="ArrowRight" size={16} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {/* PORTFOLIO */}
+    <section id="portfolio" className="py-24 px-6 bg-[#10101A]/50 section-reveal">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-16">
+          <div className="text-[#FF1A8C] font-display text-sm font-bold tracking-widest uppercase mb-4">Наши работы</div>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <h2 className="font-display font-black text-4xl md:text-5xl text-white">
+              Портфолио <span className="text-gradient-orange">проектов</span>
+            </h2>
+            <button className="self-start border border-white/15 text-white/60 hover:text-white hover:border-white/30 font-display font-bold text-sm px-5 py-2.5 rounded-full transition-all">
+              Все проекты →
+            </button>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {portfolio.map((p, i) => (
+            <div key={i} className="group relative overflow-hidden rounded-2xl aspect-[3/4] cursor-pointer card-hover">
+              <img src={p.img} alt={p.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-[#0A0A0F]/30 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-xs font-display font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 border border-[#FF5C1A]/20 px-3 py-1 rounded-full">{p.category}</span>
+                  <span className="text-xs text-white/30">{p.year}</span>
+                </div>
+                <h3 className="font-display font-bold text-lg text-white">{p.title}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ABOUT */}
+    <section id="about" className="py-24 px-6 max-w-7xl mx-auto section-reveal">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <div className="text-[#FFD600] font-display text-sm font-bold tracking-widest uppercase mb-4">О компании</div>
+          <h2 className="font-display font-black text-4xl md:text-5xl text-white leading-tight mb-6">
+            12 лет создаём
+            <br />
+            <span className="text-gradient-yellow">незабываемые</span>
+            <br />
+            моменты
+          </h2>
+          <p className="text-white/50 leading-relaxed mb-6 font-body">
+            Мы — команда профессионалов, влюблённых в своё дело. С 2012 года создаём события, которые объединяют людей, вдохновляют и остаются в памяти на годы.
+          </p>
+          <p className="text-white/50 leading-relaxed mb-10 font-body">
+            От небольших корпоративов до масштабных городских фестивалей — мы подходим к каждому проекту с одинаковой страстью и вниманием к деталям.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {["Полный цикл", "Команда 50+", "Работаем 24/7", "Своё оборудование"].map((tag) => (
+              <span key={tag} className="bg-white/5 border border-white/10 text-white/60 text-sm font-body px-4 py-2 rounded-full">{tag}</span>
+            ))}
+          </div>
+        </div>
+        <div className="relative">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-[#16162A] border border-white/5 rounded-2xl p-6 col-span-2">
+              <div className="font-display font-black text-5xl text-gradient-orange mb-2">500+</div>
+              <div className="text-white/50 font-body">успешно реализованных проектов в России и СНГ</div>
+            </div>
+            <div className="bg-gradient-to-br from-[#FF5C1A]/20 to-[#FF1A8C]/10 border border-[#FF5C1A]/20 rounded-2xl p-6">
+              <div className="font-display font-black text-3xl text-white mb-2">98%</div>
+              <div className="text-white/50 text-sm font-body">клиентов возвращаются снова</div>
+            </div>
+            <div className="bg-[#16162A] border border-white/5 rounded-2xl p-6">
+              <div className="font-display font-black text-3xl text-[#FFD600] mb-2">40+</div>
+              <div className="text-white/50 text-sm font-body">городов присутствия</div>
+            </div>
+          </div>
+          <div className="absolute -top-6 -right-6 w-40 h-40 rounded-full bg-[#FF1A8C]/10 blur-[60px]" />
+        </div>
+      </div>
+    </section>
+
+    {/* PARTNERS */}
+    <section id="partners" className="py-24 px-6 bg-[#10101A]/50 section-reveal">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <div className="text-[#FF5C1A] font-display text-sm font-bold tracking-widest uppercase mb-4">Экосистема</div>
+          <h2 className="font-display font-black text-4xl md:text-5xl text-white">
+            Наши <span className="text-gradient-orange">партнёры</span>
+          </h2>
+          <p className="text-white/40 mt-4 max-w-lg mx-auto font-body">
+            Работаем с лучшими в индустрии, чтобы гарантировать высочайшее качество каждого события
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {partners.map((p, i) => (
+            <div key={i} className="card-hover group bg-[#10101A] border border-white/5 rounded-2xl p-6 flex items-center gap-5 hover:border-[#FF5C1A]/20 transition-colors">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#16162A] to-[#1E1E35] border border-white/10 flex items-center justify-center text-2xl flex-shrink-0 group-hover:border-[#FF5C1A]/30 transition-colors">
+                {p.logo}
+              </div>
+              <div>
+                <div className="font-display font-bold text-white mb-1">{p.name}</div>
+                <div className="text-white/40 text-sm font-body">{p.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-8 text-center">
+          <p className="text-white/30 text-sm font-body">
+            Хотите стать нашим партнёром?{" "}
+            <button onClick={() => document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth" })} className="text-[#FF5C1A] hover:underline">
+              Напишите нам
+            </button>
+          </p>
+        </div>
+      </div>
+    </section>
+  </>
+);
+
+export default ContentSections;
