@@ -151,20 +151,20 @@ const HeroSection = ({ mouseX, mouseY }: { mouseX: number; mouseY: number }) => 
         <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
           <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-8 text-sm text-white/60 font-body animate-fade-in">
             <span className="w-2 h-2 rounded-full bg-[#FF5C1A] animate-pulse" />
-            Event-агентство полного цикла
+            Техническое производство мероприятий
           </div>
 
           <h1 className="font-display font-black text-5xl md:text-7xl lg:text-8xl leading-[0.9] mb-8 tracking-tight animate-fade-up">
             <span className="text-gradient-orange">ARTSTAGE</span>
             <span className="text-white/30">.PRO</span>
             <br />
-            <span className="text-white text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide">МЫ СОЗДАЁМ СОБЫТИЯ,</span>
+            <span className="text-white text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide">СЦЕНЫ. СВЕТ. ЗВУК.</span>
             <br />
-            <span className="text-gradient-yellow">О КОТОРЫХ ГОВОРЯТ</span>
+            <span className="text-gradient-yellow">МОНТАЖ ПОД КЛЮЧ</span>
           </h1>
 
           <p className="text-white/50 text-lg md:text-xl max-w-xl mx-auto mb-10 font-body leading-relaxed animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            От идеи до воплощения. Корпоративы, фестивали, конференции и приватные мероприятия под ключ.
+            Строим и демонтируем сцены, устанавливаем свет и звук, предоставляем оборудование в аренду и технический персонал для мероприятий любого масштаба.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up" style={{ animationDelay: "0.4s" }}>
