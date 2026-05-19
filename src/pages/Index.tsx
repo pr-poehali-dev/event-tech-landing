@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import NavBar from "@/components/NavBar";
 import HeroSection from "@/components/HeroSection";
 import ContentSections from "@/components/ContentSections";
@@ -20,19 +20,12 @@ function useReveal() {
 }
 
 export default function Index() {
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
   useReveal();
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", handler);
-    return () => window.removeEventListener("mousemove", handler);
-  }, []);
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-white font-body">
       <NavBar />
-      <HeroSection mouseX={mouse.x} mouseY={mouse.y} />
+      <HeroSection />
       <ContentSections />
       <ContactSection />
     </div>

@@ -20,133 +20,136 @@ const spotlights = [
   { left: "84%", delay: 2.0,  color: "#FFD600", angle:  16, intensity: 0.5  },
 ];
 
-const StageLights = ({ mouseX, mouseY, sectionRef }: {
-  mouseX: number;
-  mouseY: number;
-  sectionRef: React.RefObject<HTMLElement>;
-}) => {
+const randAngle = (base: number, range = 28) =>
+  base + (Math.random() - 0.5) * range * 2;
+
+const StageLights = () => {
   const [angles, setAngles] = useState(spotlights.map((s) => s.angle));
+  const targetAngles = useRef(spotlights.map((s) => s.angle));
+  const currentAngles = useRef(spotlights.map((s) => s.angle));
+  const rafRef = useRef<number>(0);
+  const timeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  // Каждый софит меняет цель независимо с разным интервалом
+  const scheduleNext = (i: number) => {
+    const delay = 1800 + Math.random() * 3500;
+    const t = setTimeout(() => {
+      const base = spotlights[i].angle;
+      targetAngles.current[i] = randAngle(base, 30);
+      scheduleNext(i);
+    }, delay);
+    timeoutRefs.current[i] = t;
+  };
 
   useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
+    spotlights.forEach((_, i) => {
+      // Стартовая задержка у каждого разная
+      const t = setTimeout(() => scheduleNext(i), i * 600 + Math.random() * 1000);
+      timeoutRefs.current[i] = t;
+    });
 
-    setAngles(spotlights.map((s, i) => {
-      if (i !== 3) return s.angle;
-      const fixtureX = (parseFloat(s.left) / 100) * rect.width + rect.left;
-      const fixtureY = rect.top;
-      const dx = mouseX - fixtureX;
-      const dy = mouseY - fixtureY;
-      const raw = Math.atan2(dx, dy) * (180 / Math.PI);
-      return Math.max(-45, Math.min(45, raw));
-    }));
-  }, [mouseX, mouseY, sectionRef]);
+    // RAF — плавная интерполяция текущих углов к целевым
+    const tick = () => {
+      let changed = false;
+      const next = currentAngles.current.map((cur, i) => {
+        const target = targetAngles.current[i];
+        const diff = target - cur;
+        if (Math.abs(diff) < 0.05) return cur;
+        changed = true;
+        return cur + diff * 0.018; // скорость сглаживания
+      });
+      if (changed) {
+        currentAngles.current = next;
+        setAngles([...next]);
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      timeoutRefs.current.forEach(clearTimeout);
+    };
+  }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 2 }}>
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/8" />
 
-      {spotlights.map((s, i) => {
-        const isTracking = i === 3;
-        const angle = angles[i];
-        return (
-          <div
-            key={i}
-            className="absolute top-0"
-            style={{
-              left: s.left,
-              transform: `rotate(${angle}deg)`,
-              transformOrigin: "top center",
-              transition: isTracking ? "transform 0.12s ease-out" : undefined,
-              animation: !isTracking
-                ? `spotlight-flicker ${3.5 + i * 0.7}s ease-in-out infinite`
-                : undefined,
-              animationDelay: `${s.delay}s`,
-            }}
-          >
-            <div
-              className="w-5 h-3 rounded-b-sm mx-auto"
-              style={{
-                background: isTracking
-                  ? "linear-gradient(to bottom, #3a2a1a, #1a0a00)"
-                  : "linear-gradient(to bottom, #2a2a2a, #111)",
-                boxShadow: `0 2px 10px ${s.color}${isTracking ? "cc" : "60"}`,
-                marginLeft: "-10px",
-              }}
-            />
-            <div
-              style={{
-                width: 0,
-                height: 0,
-                borderLeft: "55px solid transparent",
-                borderRight: "55px solid transparent",
-                borderTop: `520px solid ${s.color}`,
-                opacity: s.intensity * (isTracking ? 0.35 : 0.22),
-                filter: `blur(${isTracking ? 14 : 18}px)`,
-                marginLeft: "-45px",
-              }}
-            />
-            <div
-              className="absolute top-3"
-              style={{
-                left: "50%",
-                transform: "translateX(-50%)",
-                width: 0,
-                height: 0,
-                borderLeft: "18px solid transparent",
-                borderRight: "18px solid transparent",
-                borderTop: `400px solid ${s.color}`,
-                opacity: s.intensity * (isTracking ? 0.6 : 0.35),
-                filter: `blur(${isTracking ? 4 : 6}px)`,
-                marginLeft: "-8px",
-              }}
-            />
-            <div
-              className="absolute"
-              style={{
-                top: "510px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                width: isTracking ? "180px" : "140px",
-                height: isTracking ? "80px" : "60px",
-                borderRadius: "50%",
-                background: `radial-gradient(ellipse, ${s.color}${isTracking ? "55" : "35"} 0%, transparent 70%)`,
-                filter: "blur(12px)",
-                transition: "width 0.12s ease-out, height 0.12s ease-out",
-              }}
-            />
-          </div>
-        );
-      })}
-
-      {mouseX > 0 && (
+      {spotlights.map((s, i) => (
         <div
-          className="absolute pointer-events-none"
+          key={i}
+          className="absolute top-0"
           style={{
-            left: mouseX - (sectionRef.current?.getBoundingClientRect().left ?? 0) - 80,
-            top: mouseY - (sectionRef.current?.getBoundingClientRect().top ?? 0) - 80,
-            width: 160,
-            height: 160,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, #FF5C1A22 0%, transparent 70%)",
-            filter: "blur(8px)",
-            transition: "left 0.08s ease-out, top 0.08s ease-out",
+            left: s.left,
+            transform: `rotate(${angles[i]}deg)`,
+            transformOrigin: "top center",
+            animation: `spotlight-flicker ${3.5 + i * 0.7}s ease-in-out infinite`,
+            animationDelay: `${s.delay}s`,
           }}
-        />
-      )}
+        >
+          <div
+            className="w-5 h-3 rounded-b-sm mx-auto"
+            style={{
+              background: "linear-gradient(to bottom, #2a2a2a, #111)",
+              boxShadow: `0 2px 10px ${s.color}60`,
+              marginLeft: "-10px",
+            }}
+          />
+          <div
+            style={{
+              width: 0,
+              height: 0,
+              borderLeft: "55px solid transparent",
+              borderRight: "55px solid transparent",
+              borderTop: `520px solid ${s.color}`,
+              opacity: s.intensity * 0.22,
+              filter: "blur(18px)",
+              marginLeft: "-45px",
+            }}
+          />
+          <div
+            className="absolute top-3"
+            style={{
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: 0,
+              height: 0,
+              borderLeft: "18px solid transparent",
+              borderRight: "18px solid transparent",
+              borderTop: `400px solid ${s.color}`,
+              opacity: s.intensity * 0.35,
+              filter: "blur(6px)",
+              marginLeft: "-8px",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              top: "510px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "140px",
+              height: "60px",
+              borderRadius: "50%",
+              background: `radial-gradient(ellipse, ${s.color}35 0%, transparent 70%)`,
+              filter: "blur(12px)",
+            }}
+          />
+        </div>
+      ))}
     </div>
   );
 };
 
-const HeroSection = ({ mouseX, mouseY }: { mouseX: number; mouseY: number }) => {
+const HeroSection = () => {
   const heroRef = useRef<HTMLElement>(null);
 
   return (
     <>
       <section ref={heroRef} id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg pt-20">
-        <StageLights mouseX={mouseX} mouseY={mouseY} sectionRef={heroRef} />
+        <StageLights />
         <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-[#FF5C1A]/15 blur-[120px] animate-glow-pulse" />
         <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-[#FF1A8C]/15 blur-[120px] animate-glow-pulse" style={{ animationDelay: "1.5s" }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#FFD600]/5 blur-[160px]" />
