@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "@/components/ui/icon";
 
 const IMG_GALA = "https://cdn.poehali.dev/projects/0543cd19-8c4b-447b-af5e-1bf0504c2dc7/files/b4ab4e7d-15ff-4217-9137-2e649ece655b.jpg";
@@ -45,80 +45,130 @@ const spotlights = [
   { left: "84%", delay: 2.0,  color: "#FFD600", angle:  16, intensity: 0.5  },
 ];
 
-const StageLights = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 2 }}>
-    {/* Rigging bar */}
-    <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-    <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/8" />
+const StageLights = ({ mouseX, mouseY, sectionRef }: {
+  mouseX: number;
+  mouseY: number;
+  sectionRef: React.RefObject<HTMLElement>;
+}) => {
+  const [angles, setAngles] = useState(spotlights.map((s) => s.angle));
 
-    {spotlights.map((s, i) => (
-      <div
-        key={i}
-        className="absolute top-0"
-        style={{
-          left: s.left,
-          transform: `rotate(${s.angle}deg)`,
-          transformOrigin: "top center",
-          animation: `spotlight-flicker ${3.5 + i * 0.7}s ease-in-out infinite`,
-          animationDelay: `${s.delay}s`,
-        }}
-      >
-        {/* Fixture head */}
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+
+    setAngles(spotlights.map((s, i) => {
+      if (i !== 3) return s.angle;
+      const fixtureX = (parseFloat(s.left) / 100) * rect.width + rect.left;
+      const fixtureY = rect.top;
+      const dx = mouseX - fixtureX;
+      const dy = mouseY - fixtureY;
+      const raw = Math.atan2(dx, dy) * (180 / Math.PI);
+      return Math.max(-45, Math.min(45, raw));
+    }));
+  }, [mouseX, mouseY, sectionRef]);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 2 }}>
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/8" />
+
+      {spotlights.map((s, i) => {
+        const isTracking = i === 3;
+        const angle = angles[i];
+        return (
+          <div
+            key={i}
+            className="absolute top-0"
+            style={{
+              left: s.left,
+              transform: `rotate(${angle}deg)`,
+              transformOrigin: "top center",
+              transition: isTracking ? "transform 0.12s ease-out" : undefined,
+              animation: !isTracking
+                ? `spotlight-flicker ${3.5 + i * 0.7}s ease-in-out infinite`
+                : undefined,
+              animationDelay: `${s.delay}s`,
+            }}
+          >
+            {/* Fixture head */}
+            <div
+              className="w-5 h-3 rounded-b-sm mx-auto"
+              style={{
+                background: isTracking
+                  ? "linear-gradient(to bottom, #3a2a1a, #1a0a00)"
+                  : "linear-gradient(to bottom, #2a2a2a, #111)",
+                boxShadow: `0 2px 10px ${s.color}${isTracking ? "cc" : "60"}`,
+                marginLeft: "-10px",
+              }}
+            />
+            {/* Beam cone */}
+            <div
+              style={{
+                width: 0,
+                height: 0,
+                borderLeft: "55px solid transparent",
+                borderRight: "55px solid transparent",
+                borderTop: `520px solid ${s.color}`,
+                opacity: s.intensity * (isTracking ? 0.35 : 0.22),
+                filter: `blur(${isTracking ? 14 : 18}px)`,
+                marginLeft: "-45px",
+              }}
+            />
+            {/* Inner bright core */}
+            <div
+              className="absolute top-3"
+              style={{
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: 0,
+                height: 0,
+                borderLeft: "18px solid transparent",
+                borderRight: "18px solid transparent",
+                borderTop: `400px solid ${s.color}`,
+                opacity: s.intensity * (isTracking ? 0.6 : 0.35),
+                filter: `blur(${isTracking ? 4 : 6}px)`,
+                marginLeft: "-8px",
+              }}
+            />
+            {/* Floor glow pool */}
+            <div
+              className="absolute"
+              style={{
+                top: "510px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: isTracking ? "180px" : "140px",
+                height: isTracking ? "80px" : "60px",
+                borderRadius: "50%",
+                background: `radial-gradient(ellipse, ${s.color}${isTracking ? "55" : "35"} 0%, transparent 70%)`,
+                filter: "blur(12px)",
+                transition: "width 0.12s ease-out, height 0.12s ease-out",
+              }}
+            />
+          </div>
+        );
+      })}
+
+      {/* Cursor spotlight glow */}
+      {mouseX > 0 && (
         <div
-          className="w-5 h-3 rounded-b-sm mx-auto"
+          className="absolute pointer-events-none"
           style={{
-            background: `linear-gradient(to bottom, #2a2a2a, #111)`,
-            boxShadow: `0 2px 8px ${s.color}60`,
-            marginLeft: "-10px",
-          }}
-        />
-        {/* Beam cone */}
-        <div
-          style={{
-            width: 0,
-            height: 0,
-            borderLeft: "55px solid transparent",
-            borderRight: "55px solid transparent",
-            borderTop: `520px solid ${s.color}`,
-            opacity: s.intensity * 0.22,
-            filter: "blur(18px)",
-            marginLeft: "-45px",
-          }}
-        />
-        {/* Inner bright core */}
-        <div
-          className="absolute top-3"
-          style={{
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 0,
-            height: 0,
-            borderLeft: "18px solid transparent",
-            borderRight: "18px solid transparent",
-            borderTop: `400px solid ${s.color}`,
-            opacity: s.intensity * 0.35,
-            filter: "blur(6px)",
-            marginLeft: "-8px",
-          }}
-        />
-        {/* Floor glow pool */}
-        <div
-          className="absolute"
-          style={{
-            top: "510px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "140px",
-            height: "60px",
+            left: mouseX - (sectionRef.current?.getBoundingClientRect().left ?? 0) - 80,
+            top: mouseY - (sectionRef.current?.getBoundingClientRect().top ?? 0) - 80,
+            width: 160,
+            height: 160,
             borderRadius: "50%",
-            background: `radial-gradient(ellipse, ${s.color}35 0%, transparent 70%)`,
-            filter: "blur(12px)",
+            background: "radial-gradient(circle, #FF5C1A22 0%, transparent 70%)",
+            filter: "blur(8px)",
+            transition: "left 0.08s ease-out, top 0.08s ease-out",
           }}
         />
-      </div>
-    ))}
-  </div>
-);
+      )}
+    </div>
+  );
+};
 
 function useReveal() {
   useEffect(() => {
@@ -200,15 +250,23 @@ const NavBar = ({ onNav }: { onNav: (s: string) => void }) => {
 
 export default function Index() {
   const [, setActiveSection] = useState("hero");
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const heroRef = useRef<HTMLElement>(null);
   useReveal();
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", handler);
+    return () => window.removeEventListener("mousemove", handler);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-white font-body">
       <NavBar onNav={setActiveSection} />
 
       {/* HERO */}
-      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg">
-        <StageLights />
+      <section ref={heroRef} id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg">
+        <StageLights mouseX={mouse.x} mouseY={mouse.y} sectionRef={heroRef} />
         <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-[#FF5C1A]/15 blur-[120px] animate-glow-pulse" />
         <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-[#FF1A8C]/15 blur-[120px] animate-glow-pulse" style={{ animationDelay: "1.5s" }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#FFD600]/5 blur-[160px]" />
