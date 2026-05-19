@@ -113,20 +113,20 @@ const ContentSections = () => {
         <div>
           <div className="text-[#FFD600] font-display text-sm font-bold tracking-widest uppercase mb-4">О компании</div>
           <h2 className="font-display font-black text-4xl md:text-5xl text-white leading-tight mb-6">
-            12 лет создаём
+            12 лет строим
             <br />
-            <span className="text-gradient-yellow">незабываемые</span>
+            <span className="text-gradient-yellow">сцены для</span>
             <br />
-            моменты
+            больших событий
           </h2>
           <p className="text-white/50 leading-relaxed mb-6 font-body">
-            Мы — команда профессионалов, влюблённых в своё дело. С 2012 года создаём события, которые объединяют людей, вдохновляют и остаются в памяти на годы.
+            Мы — техническая команда полного цикла. Монтируем и демонтируем сцены, устанавливаем свет и звук, обеспечиваем техническое сопровождение мероприятий любого масштаба.
           </p>
           <p className="text-white/50 leading-relaxed mb-10 font-body">
-            От небольших корпоративов до масштабных городских фестивалей — мы подходим к каждому проекту с одинаковой страстью и вниманием к деталям.
+            В штате — опытные монтажники, техники, декораторы и хелперы. Собственный парк оборудования позволяет работать быстро и без лишних посредников.
           </p>
           <div className="flex flex-wrap gap-3">
-            {["Полный цикл", "Команда 50+", "Работаем 24/7", "Своё оборудование"].map((tag) => (
+            {["Собственное оборудование", "Монтаж под ключ", "Команда 50+", "Работаем 24/7"].map((tag) => (
               <span key={tag} className="bg-white/5 border border-white/10 text-white/60 text-sm font-body px-4 py-2 rounded-full">{tag}</span>
             ))}
           </div>

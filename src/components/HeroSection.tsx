@@ -200,8 +200,8 @@ const HeroSection = ({ mouseX, mouseY }: { mouseX: number; mouseY: number }) => 
       {/* TICKER */}
       <div className="overflow-hidden border-y border-white/5 bg-[#10101A] py-4">
         <div className="flex gap-12 animate-ticker whitespace-nowrap">
-          {["КОРПОРАТИВЫ", "ФЕСТИВАЛИ", "КОНФЕРЕНЦИИ", "СВАДЬБЫ", "КОНЦЕРТЫ", "ФОРУМЫ", "ПРЕЗЕНТАЦИИ", "ГАЛА-ВЕЧЕРА",
-            "КОРПОРАТИВЫ", "ФЕСТИВАЛИ", "КОНФЕРЕНЦИИ", "СВАДЬБЫ", "КОНЦЕРТЫ", "ФОРУМЫ", "ПРЕЗЕНТАЦИИ", "ГАЛА-ВЕЧЕРА"].map((t, i) => (
+          {["МОНТАЖ СЦЕН", "СВЕТ И ЗВУК", "АРЕНДА ОБОРУДОВАНИЯ", "ТЕХНИЧЕСКИЙ НАДЗОР", "ДЕКОР", "ПЕРСОНАЛ", "ДЕМОНТАЖ", "КОРПОРАТИВЫ", "ФЕСТИВАЛИ", "КОНЦЕРТЫ",
+            "МОНТАЖ СЦЕН", "СВЕТ И ЗВУК", "АРЕНДА ОБОРУДОВАНИЯ", "ТЕХНИЧЕСКИЙ НАДЗОР", "ДЕКОР", "ПЕРСОНАЛ", "ДЕМОНТАЖ", "КОРПОРАТИВЫ", "ФЕСТИВАЛИ", "КОНЦЕРТЫ"].map((t, i) => (
             <span key={i} className="font-display font-black text-sm tracking-widest text-white/15 flex items-center gap-12">
               {t} <span className="text-[#FF5C1A]">✦</span>
             </span>
