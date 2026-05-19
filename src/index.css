@@ -103,6 +103,20 @@
     transform: translateY(0);
   }
 
+  @keyframes hero-glow {
+    0%,
+    100% {
+      filter: drop-shadow(0 0 12px rgba(255, 92, 26, 0.25));
+    }
+    50% {
+      filter: drop-shadow(0 0 22px rgba(255, 92, 26, 0.55));
+    }
+  }
+
+  .hero-title-glow {
+    animation: hero-glow 4.5s ease-in-out infinite;
+  }
+
   .grid-bg {
     background-image:
       linear-gradient(rgba(255, 92, 26, 0.05) 1px, transparent 1px),

@@ -148,7 +148,7 @@ const HeroSection = () => {
 
   return (
     <>
-      <section ref={heroRef} id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg pt-20">
+      <section ref={heroRef} id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         <StageLights />
         <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-[#FF5C1A]/15 blur-[120px] animate-glow-pulse" />
         <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-[#FF1A8C]/15 blur-[120px] animate-glow-pulse" style={{ animationDelay: "1.5s" }} />
@@ -160,16 +160,16 @@ const HeroSection = () => {
             Техническое производство мероприятий
           </div>
 
-          <h1 className="font-display font-black text-5xl md:text-7xl lg:text-8xl leading-[0.9] mb-8 tracking-tight animate-fade-up">
-            <span className="text-gradient-orange">ARTSTAGE</span>
+          <h1 className="font-display font-black text-4xl md:text-5xl lg:text-7xl leading-[0.95] mb-7 tracking-tight animate-fade-up">
+            <span className="inline-block hero-title-glow text-gradient-orange">ARTSTAGE</span>
             <span className="text-white/30">.PRO</span>
             <br />
-            <span className="text-white text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide">СЦЕНЫ. СВЕТ. ЗВУК.</span>
+            <span className="text-white text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide">СЦЕНЫ. СВЕТ. ЗВУК.</span>
             <br />
             <span className="text-gradient-yellow">МОНТАЖ ПОД КЛЮЧ</span>
           </h1>
 
-          <p className="text-white/50 text-lg md:text-xl max-w-xl mx-auto mb-10 font-body leading-relaxed animate-fade-up" style={{ animationDelay: "0.2s" }}>
+          <p className="text-white/50 text-base md:text-lg max-w-xl mx-auto mb-10 font-body leading-relaxed animate-fade-up" style={{ animationDelay: "0.2s" }}>
             Строим и демонтируем сцены, устанавливаем свет и звук, предоставляем оборудование в аренду и технический персонал для мероприятий любого масштаба.
           </p>
 
